@@ -8,15 +8,17 @@ public class GrabZone : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("GrabZone") && grabMove != null)
+        Debug.Log(other.name);
+        if (other.CompareTag("Player") && grabMove != null)
         {
+            Debug.Log("how are you");
             grabMove.SetActive(true);
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.CompareTag("GrabZone") && grabMove != null)
+        if (other.CompareTag("Player") && grabMove != null)
         {
             grabMove.SetActive(false);
         }

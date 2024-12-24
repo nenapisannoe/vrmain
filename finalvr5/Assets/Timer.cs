@@ -6,10 +6,12 @@ using System;
 
 public class Timer : MonoBehaviour
 { 
-    public TMP_Text  timeDisplay;
+    public TMP_Text timeText;
+    public TMP_Text collectablesText;
 
     private bool isRunning = false;
     private float elapsedTime = 0f;
+    private int collectableCollected = 0;
 
     public void StartTimer()
     {
@@ -34,7 +36,7 @@ public class Timer : MonoBehaviour
         {
             elapsedTime += Time.deltaTime;
         }
-        if (timeDisplay != null)
+        if (timeText != null)
         {
             TimeSpan timeSpan = TimeSpan.FromSeconds(elapsedTime);
             string timeFormatted = string.Format("{0:D2}:{1:D2}:{2:D2}.{3:D3}",
@@ -42,17 +44,23 @@ public class Timer : MonoBehaviour
                 timeSpan.Minutes,
                 timeSpan.Seconds,
                 timeSpan.Milliseconds);
-            timeDisplay.text = timeFormatted;
+            timeText.text = timeFormatted;
             Debug.Log("i happened");
         }
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log(other.name);
         if (other.CompareTag("Start"))
         {
             StartTimer();
+        }
+        else if(other.CompareTag("Collectable"))
+        {
+            Destroy(other.gameObject);
+            PathBuilder.onCollectable?.Invoke(collectableCollected);
+            collectableCollected++;
+            collectablesText.text = collectableCollected.ToString();
         }
         else if (other.CompareTag("End"))
         {
